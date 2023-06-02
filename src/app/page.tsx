@@ -1,5 +1,5 @@
 // import Image from 'next/image'
-'use client'
+'use client';
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 

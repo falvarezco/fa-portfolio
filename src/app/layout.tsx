@@ -10,6 +10,8 @@ export const metadata = {
   description: 'Felipe Alvarez Portfolio',
 }
 
+const BODY_CLASSES = `bg-zinc-800 ${jost.className}`;
+
 export default function RootLayout({
   children,
 }: {
@@ -17,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`bg-zinc-800 ${jost.className}`}>
+      <body className={BODY_CLASSES}>
         <Navigation />
         {children}
       </body>
