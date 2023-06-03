@@ -5,7 +5,7 @@ const ACTION_ICON_CLASSES = 'text-neutral-100 hover:text-yellow-300 ease-in-out 
 
 type ActionButtonType = {
   open: boolean;
-  onStateToggle: () => {},
+  onStateToggle: () => any,
 }
 
 const ActionButton: React.FunctionComponent<ActionButtonType> = ({
