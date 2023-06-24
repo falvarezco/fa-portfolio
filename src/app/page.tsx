@@ -1,20 +1,23 @@
 // import Image from 'next/image'
 'use client';
-import { useRouter } from "next/navigation";
-import Button from "@/components/Button";
-import Card from "@/components/Card";
-
+// import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import Button from '@/components/Button';
+import Card from '@/components/Card';
+// import { MobileCheckContext } from '@/context/MobileCheckContext';
+// TODO: Move text constants to shared strings file and consume here
 const INTRO_TXT = `Hello, I'm UI developer and Product Designer. With a passion for creating seamless user experiences and visually captivating interfaces, I combine my technical expertise with a deep understanding of user-centered design principles.`;
 const MORE_ABOUT_BUTTON_TXT = 'More About Me';
 const NEXT_BUTTON_TXT = 'Next';
 
 export default function Landing() {
+  // const mobileUI = useContext(MobileCheckContext);
   const router = useRouter();
   const goToAbout = () => router.push('/about');
   const moveToNextCard = () => {}
 
   return (
-    <main className="pt-[200px] overflow-hidden">
+    <main className="pt-[200px] h-full min-h-min overflow-y-visible overflow-x-hidden">
       <section className="container mx-auto">
         <p className="text-neutral-100 px-5 py-10">{INTRO_TXT}</p>
         <div className="flex justify-center">
@@ -28,7 +31,7 @@ export default function Landing() {
       </section>
       <section className="flex px-10 pb-10 flex-row-reverse">
         <Button label={NEXT_BUTTON_TXT} onClick={moveToNextCard} />
-      </section>
+      </section>  
     </main>
   )
 }

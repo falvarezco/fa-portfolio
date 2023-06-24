@@ -1,5 +1,11 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  FC,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { isMobile } from 'react-device-detect';
 import {
@@ -7,7 +13,10 @@ import {
   Behance,
   Twitter,
 } from 'react-bootstrap-icons';
+import { PAGE_LINKS } from '@/constants/NavLinks';
 import ActionButton from './ActionButton';
+import { MobileCheckContext } from '@/context/MobileCheckContext';
+import MobileNavigation from './MobileNavigation';
 
 const LINK_CLASS = 'whitespace-nowrap text-neutral-100 hover:text-yellow-300 hover:cursor-pointer ease-in-out duration-300';
 const WRAPPER_CLASSES = 'w-full flex fixed justify-center top-7 z-10';
@@ -16,42 +25,35 @@ const NAV_CLASSES_BASE = 'flex justify-between items-center py-2 px-2 pr-[18px] 
 const NAV_CLASSES_OPEN = `sm:w-full md:w-[800px] md:h-[94px]`;
 const NAV_CLASSES_CLOSED = `w-[328px] h-[94px]`;
 
-type PageLink = {
-  name: string,
-  url: string,
+
+type NavigationProps = {
+  onDeviceChange: any
 }
 
-const PAGE_LINKS:Array<PageLink> = [
-  {
-    name: 'Projects',
-    url: '/'
-  },
-  {
-    name: 'About',
-    url: '/about'
-  },
-  {
-    name: 'Contact',
-    url: '/'
-  },
-];
-
-const Navigation = () => {
-  const [open, toggleNav] = useState(true);
+const Navigation: FC<NavigationProps> = ({ onDeviceChange }) => {
   const router = useRouter();
-  const navClasses = `${open ? NAV_CLASSES_OPEN : NAV_CLASSES_CLOSED} ${NAV_CLASSES_BASE}`;
+  const mobileUI = useContext(MobileCheckContext);
+  const [open, toggleNav] = useState(true);
+  const navClasses = `${!mobileUI && open ? NAV_CLASSES_OPEN : NAV_CLASSES_CLOSED} ${NAV_CLASSES_BASE}`;
 
   useEffect(() => {
     if (isMobile) {
+      onDeviceChange(true);
       toggleNav(false);
     }
+    // TODO: Add onDeviceChange to Dep Array
   }, []);
 
   const toggleState = () => {
-    !isMobile && toggleNav(!open);
+    !mobileUI && toggleNav(!open);
   }
 
-  const goToLink:Function = (url: string) => router.push(url)
+  const goToLink:Function = (url: string) => {
+    if(mobileUI) {
+      toggleNav(false)
+    }
+    router.push(url);
+  }
 
   return (
     <div className={WRAPPER_CLASSES}> 
@@ -61,7 +63,7 @@ const Navigation = () => {
           </figure>
           <h1 className="text-neutral-100 text-xl font-light whitespace-nowrap">Felipe Alvarez</h1>
         </section>
-        {open &&
+        {open && !mobileUI &&
           <div className="flex gap-8">
             <ul className="flex gap-8 items-center">
               {PAGE_LINKS.map(({ name, url }, idx) => (
@@ -86,8 +88,16 @@ const Navigation = () => {
             </ul>
           </div>
         }
-        <ActionButton open={open} onStateToggle={toggleState}/>
+        <ActionButton 
+          open={open}
+          onStateToggle={() => toggleNav(!open)}
+        />
       </nav>
+      {/* Modal type navigation for Mobile only */}
+      {mobileUI && open && createPortal(
+       <MobileNavigation onNavigate={goToLink}/>, 
+        document.body
+      )}
     </div>
   )
 }
