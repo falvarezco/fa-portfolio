@@ -14,12 +14,12 @@ const MOBILE_LINKS = [
     url: '/'
   },
   ...PAGE_LINKS
-]
+];
 
 const MobileNavigation:FC<MobileNavigationProps> = ({ onNavigate }) => {
   return (
     <nav className="bg-zinc-900 absolute top-0 w-full h-full">
-      <ul className="flex flex-col gap-20 items-center pt-[200px]">
+      <ul className="h-full flex flex-col justify-between py-[30%] gap-20 items-center pt-[200px]">
         {MOBILE_LINKS.map(({ name, url }, idx) => (
           <li 
             key={`${name}-${url}`}

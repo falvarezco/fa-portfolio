@@ -9,15 +9,15 @@ import Card from '@/components/Card';
 const INTRO_TXT = `Hello, I'm UI developer and Product Designer. With a passion for creating seamless user experiences and visually captivating interfaces, I combine my technical expertise with a deep understanding of user-centered design principles.`;
 const MORE_ABOUT_BUTTON_TXT = 'More About Me';
 const NEXT_BUTTON_TXT = 'Next';
+const MAIN_PAGE_CLASSES = 'flex flex-col justify-between h-full min-h-min pt-[200px] overflow-y-visible overflow-x-hidden';
 
 export default function Landing() {
-  // const mobileUI = useContext(MobileCheckContext);
   const router = useRouter();
   const goToAbout = () => router.push('/about');
   const moveToNextCard = () => {}
 
   return (
-    <main className="pt-[200px] h-full min-h-min overflow-y-visible overflow-x-hidden">
+    <main className={MAIN_PAGE_CLASSES}>
       <section className="container mx-auto">
         <p className="text-neutral-100 px-5 py-10">{INTRO_TXT}</p>
         <div className="flex justify-center">
