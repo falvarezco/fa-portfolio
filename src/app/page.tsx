@@ -1,37 +1,63 @@
-// import Image from 'next/image'
 'use client';
-// import { useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
-// import { MobileCheckContext } from '@/context/MobileCheckContext';
-// TODO: Move text constants to shared strings file and consume here
-const INTRO_TXT = `Hello, I'm UI developer and Product Designer. With a passion for creating seamless user experiences and visually captivating interfaces, I combine my technical expertise with a deep understanding of user-centered design principles.`;
-const MORE_ABOUT_BUTTON_TXT = 'More About Me';
-const NEXT_BUTTON_TXT = 'Next';
+import { fetchEntry } from '@/contentful-config';
+
+const HOME_ENTRY_ID = '6sWX2Wp51UGH7m8Nv8VWBV';
+const CARDS_ENTRY_ID = '2p1Eos2wm26Vpjfa1te0NL';
 const MAIN_PAGE_CLASSES = 'flex flex-col justify-between h-full min-h-min pt-[200px] overflow-y-visible overflow-x-hidden';
 
 export default function Landing() {
   const router = useRouter();
-  const goToAbout = () => router.push('/about');
-  const moveToNextCard = () => {}
+  const [pageData, setPageData]: any = useState(null);
+  const [cardData, setCardData]: any = useState(null);
+  const slideTo = (type: string) => {}
 
-  return (
-    <main className={MAIN_PAGE_CLASSES}>
-      <section className="container mx-auto">
-        <p className="text-neutral-100 px-5 py-10">{INTRO_TXT}</p>
-        <div className="flex justify-center">
-          <Button label={MORE_ABOUT_BUTTON_TXT} onClick={goToAbout} />
-        </div>
-      </section>
-      <section className="flex gap-10 py-10 pl-10">
-        <Card />
-        <Card />
-        <Card />
-      </section>
-      <section className="flex px-10 pb-10 flex-row-reverse">
-        <Button label={NEXT_BUTTON_TXT} onClick={moveToNextCard} />
+  useEffect(() => {
+    fetchEntry(HOME_ENTRY_ID).then(({ fields }: any) => {
+      setPageData(fields);
+    });
+
+    fetchEntry(CARDS_ENTRY_ID).then(({ fields }: any) => {
+      setCardData(fields);
+    });
+  }, [])
+
+  if (!pageData && !cardData) {
+    return <p>Loading...</p>;
+  } else {
+    const {
+      introParagraph,
+      moreAboutButton,
+      sliderButtons,
+    } = pageData;
+
+    return (
+      <main className={MAIN_PAGE_CLASSES}>
+        <section className="container mx-auto">
+          <p className="text-neutral-100 px-5 py-10">{introParagraph}</p>
+          <div className="flex justify-center">
+          <Button
+            label={moreAboutButton.text}
+            onClick={() => router.push(moreAboutButton.url)}
+          />
+          </div>
+        </section>
+        <section className="flex gap-10 py-10 justify-center">
+          <Card {...cardData} />
+        </section>
+        <section className="flex px-10 pb-10 flex-row-reverse justify-between">
+        {sliderButtons.map(({ text }: any) => (
+          <Button 
+            key={text} 
+            label={text} 
+            onClick={() => slideTo(text)}
+          />
+        ))}
       </section>  
-    </main>
-  )
+      </main>
+    )
+  }
 }

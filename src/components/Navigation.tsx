@@ -43,8 +43,7 @@ const Navigation: FC<NavigationProps> = ({ onDeviceChange }) => {
       onDeviceChange(true);
       toggleNav(false);
     }
-    // TODO: Add onDeviceChange to Dep Array
-  }, []);
+  }, [onDeviceChange]);
 
   const toggleState = () => {
     !mobileUI && toggleNav(!open);
@@ -104,7 +103,7 @@ const Navigation: FC<NavigationProps> = ({ onDeviceChange }) => {
       </nav>
       {/* Modal type navigation for Mobile only */}
       {mobileUI && open && createPortal(
-       <MobileNavigation onNavigate={goToLink}/>, 
+        <MobileNavigation onNavigate={goToLink}/>, 
         document.body
       )}
     </div>
